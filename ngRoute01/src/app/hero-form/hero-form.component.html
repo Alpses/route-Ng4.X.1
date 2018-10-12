@@ -25,7 +25,9 @@
         <select class="form-control" id="power"
                 required
                 [(ngModel)]="model.power" name="power"
+                (change)="optionChange($event.target.value)"
                 #power="ngModel">
+          <option value="">请选择</option>
           <option *ngFor="let pow of powers" [value]="pow">{{pow}}</option>
         </select>
         <div [hidden]="power.valid || power.pristine" class="alert alert-danger">
