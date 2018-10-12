@@ -1,3 +1,100 @@
-<p>
-  form2 works!
-</p>
+<p>Angular 4.x 中有两种表单：</p>
+<ul>
+  <li *ngFor="let ar of arr">{{ar}}</li>
+</ul>
+<pre>
+  {{tip1}}
+  与{{tip2}}等价
+</pre>
+
+<p>本文主要介绍{{arr[1]}}。<br>Tips:{{tips}}</p>
+<form novalidate #userRegForm="ngForm" style="border:1px solid #666;">
+  <label>
+    <span>Full name</span>
+    <input
+      type="text"
+      name="name"
+      ngModel
+      [(ngModel)]="user.name"
+      placeholder="Your full name">
+  </label>
+  <div>
+    <label>
+      <span>Email address</span>
+      <input
+        type="email"
+        name="email"
+        [(ngModel)]="user.account.email"
+        ngModel
+        placeholder="Your email address">
+    </label>
+    <label>
+      <span>Confirm address</span>
+      <input
+        type="email"
+        name="confirm"
+        [(ngModel)]="user.account.confirm"
+        ngModel
+        placeholder="Confirm your email address">
+    </label>
+  </div>
+  <button type="submit">Sign up</button>
+  {{userRegForm.value | json}}
+</form>
+*************************************************************************<br>
+ngModelGroup
+<form novalidate #f="ngForm" (ngSubmit)="onSbmit(f,f)" style="border:1px solid rgb(27, 25, 172);">
+  <label>
+    <span>Full name</span>
+    <input
+      type="text"
+      placeholder="Your full name"
+      name="name" required #userName="ngModel" minlength="3"
+      ngModel>
+  </label>
+  <div ngModelGroup="account" #userAccount="ngModelGroup">
+    <label>
+      <span>Email address</span>
+      <input
+        type="email"
+        placeholder="Your email address"
+        name="email"
+        ngModel>
+    </label>
+    <label>
+      <span>Confirm address</span>
+      <input
+        type="email"
+        placeholder="Confirm your email address"
+        name="confirm"
+        ngModel>
+    </label>
+  </div>
+  <button type="submit" [disabled]="f.invalid">Sign up</button> {{f.value | json}}<br>
+  {{f.controls.name?.errors | json}}
+  <div *ngIf="userName.errors?.required && userName.touched" class="error">Name is Required</div>
+  <div *ngIf="userName.errors?.minlength && userName.touched" class="error">Minimum of 3 characters</div>
+
+  <div *ngIf="userAccount.invalid">Both Email are Required</div>
+  -_{{userAccount.invalid | json}}--
+</form>
+<pre>Tips: ?.prop 称为安全导航操作符，用于告诉 Angular prop 的值可能不存在。</pre>
+*************************************************************************<br>
+<form #concatForm = "ngForm">
+  <fieldset ngModelGroup="nameGroup" #nameGroup="ngModelGroup">
+      <label>姓:</label>
+      <input type="text" name="firstname" [(ngModel)]="curContact.firstname" 
+             required> 
+        <label>名字:</label>
+      <input type="text" name="lastname" [(ngModel)]="curContact.lastname"     
+             required>
+  </fieldset>
+  <fieldset ngModelGroup="addressGroup" #addressGroup ="ngModelGroup">
+      <label>街:</label>
+      <input type="text" name="street" [(ngModel)]="curContact.street" required>             <label>区:</label>
+      <input type="text" name="zip" [(ngModel)]="curContact.zip" required> 
+      <label>城市:</label>
+      <input type="text" name="city" [(ngModel)]="curContact.city" required>
+  </fieldset>
+</form>
+{{concatForm.value | json}}
